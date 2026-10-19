@@ -3,8 +3,16 @@ import { AcademyEvent, AcademyEventType, EventOf } from "../models/events";
 /** Une fonction qui reçoit un événement d'un type précis. */
 export type EventHandler<K extends AcademyEventType> = (event: EventOf<K>) => void;
 
+/**
+ * Le service a seulement besoin d'ENVOYER des événements.
+ * On lui donne donc une petite interface avec juste emit() (principe I de SOLID).
+ */
+export interface EventPublisher {
+  emit(event: AcademyEvent): void;
+}
+
 /** Bus d'événements typé de l'Académie. */
-export class EventBus {
+export class EventBus implements EventPublisher {
   private readonly handlers = new Map<AcademyEventType, Set<(event: AcademyEvent) => void>>();
 
   /**
