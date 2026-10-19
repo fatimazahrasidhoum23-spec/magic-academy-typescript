@@ -1,27 +1,27 @@
-﻿import { SpellRepository } from "./repositories/spell.repository";
+﻿import {
+  SpellCalculatorService,
+  DamageArgs,
+  DamageResult,
+} from "./services/spell-calculator.service";
 
-const spells = new SpellRepository();
+console.log("=== Exercice 5 ===");
 
-console.log("=== Exercice 4 ===");
+const calculateurHarry = new SpellCalculatorService();
+const calculateurDraco = new SpellCalculatorService();
 
-// ✅ Sort valide
-const expelliarmus = spells.add({
-  name: "Expelliarmus",
-  incantation: "Expelliarmus !",
-  power: 50,
-});
-console.log("✅ Sort ajouté :", expelliarmus);
+console.log("\n-- Calculateur de Harry --");
+console.log("Résultat :", calculateurHarry.calculateDamage(50, 3)); // calcul
+console.log("Résultat :", calculateurHarry.calculateDamage(50, 3)); // cache ⚡
+console.log("Résultat :", calculateurHarry.calculateDamage(80, 5)); // calcul (nouveaux args)
+console.log("Résultat :", calculateurHarry.calculateDamage(50, 3)); // cache ⚡
 
-// ✅ Puissance 0 : accepté (seul "inférieur à zéro" est refusé)
-const lumos = spells.add({ name: "Lumos", incantation: "Lumos !", power: 0 });
-console.log("✅ Sort ajouté :", lumos);
+console.log("\n-- Calculateur de Draco (cache séparé) --");
+console.log("Résultat :", calculateurDraco.calculateDamage(50, 3)); // calcul (autre instance)
 
-// ❌ Sort invalide : puissance négative
-try {
-  spells.add({ name: "Sortilège raté", incantation: "Oups !", power: -20 });
-  console.log("Ce message ne doit jamais s'afficher");
-} catch (error) {
-  console.log("❌", (error as Error).message);
-}
+console.log("\nCalculs réels Harry :", calculateurHarry.getComputationCount()); // 2
+console.log("Calculs réels Draco :", calculateurDraco.getComputationCount()); // 1
 
-console.log("Sorts enregistrés :", spells.findAll().map((s) => s.name));
+// Parameters et ReturnType
+const args: DamageArgs = [100, 7];
+const resultat: DamageResult = calculateurHarry.calculateDamage(...args);
+console.log("\nAvec Parameters et ReturnType :", resultat);
