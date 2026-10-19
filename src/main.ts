@@ -1,30 +1,34 @@
-﻿import { isHouse } from "./guards/is-house";
-import { isWizard } from "./guards/is-wizard";
+﻿import { EventBus } from "./services/event-bus";
+import {
+  handleSpellCast,
+  handlePointsAwarded,
+  handleWizardEnrolled,
+} from "./services/event-handlers";
 
-console.log("=== Exercice 6 : isHouse ===");
-console.log('"Gryffindor" :', isHouse("Gryffindor"));  // true
-console.log('"Hufflepuff" :', isHouse("Hufflepuff"));  // true
-console.log('"Durmstrang" :', isHouse("Durmstrang"));  // false
-console.log('"gryffindor" :', isHouse("gryffindor"));  // false (minuscule)
-console.log("42 :", isHouse(42));                       // false
+console.log("=== Exercice 3 + Événements ===\n");
 
-console.log("\n=== Exercice 6 : isWizard ===");
+const bus = new EventBus();
 
-// Données "venues de l'extérieur" : TypeScript ne connaît pas leur type
-const donnees: unknown[] = [
-  { id: 1, name: "Luna Lovegood", house: "Ravenclaw", year: 4, wand: "Peut-être sorbier" },
-  { id: 2, name: "Viktor Krum", house: "Durmstrang", year: 7, wand: "Charme, ventricule de dragon" },
-  { id: 3, name: "Neville Londubat", house: "Gryffindor", wand: "Cerisier" },
-  { id: 4, name: "Cedric Diggory", house: "Hufflepuff", year: 9, wand: "Frêne" },
-  null,
-  "Je suis un sorcier, promis",
-];
+// Abonnements
+bus.on("wizard-enrolled", handleWizardEnrolled);
+const stopEcouteSorts = bus.on("spell-cast", handleSpellCast);
+bus.on("points-awarded", handlePointsAwarded);
 
-for (const donnee of donnees) {
-  if (isWizard(donnee)) {
-    // Ici, TypeScript SAIT que donnee est un Wizard : l'autocomplétion marche
-    console.log(`✅ ${donnee.name} (${donnee.house}, année ${donnee.year})`);
-  } else {
-    console.log("❌ Refusé :", JSON.stringify(donnee));
-  }
-}
+// Envoi d'événements
+bus.emit({
+  type: "wizard-enrolled",
+  wizard: { id: 1, name: "Harry Potter", house: "Gryffindor", year: 1, wand: "Houx" },
+});
+bus.emit({ type: "spell-cast", wizardId: 1, spell: "Expelliarmus", power: 50 });
+bus.emit({ type: "spell-cast", wizardId: 1, spell: "Lumos", power: 10 });
+bus.emit({ type: "points-awarded", house: "Gryffindor", points: 50, reason: "Courage exceptionnel" });
+bus.emit({ type: "points-awarded", house: "Slytherin", points: -10, reason: "Insolence" });
+
+// Personne n'écoute les duels : rien ne s'affiche, et pas d'erreur
+bus.emit({ type: "duel", winnerId: 1, loserId: 2 });
+
+// Désabonnement
+console.log("\n-- Désabonnement des sorts --");
+stopEcouteSorts();
+bus.emit({ type: "spell-cast", wizardId: 2, spell: "Avada Kedavra", power: 999 });
+console.log("(aucun sort affiché : on n'écoute plus)");
