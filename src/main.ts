@@ -1,27 +1,15 @@
-﻿import { SpellCastEvent, NonSpellEvent } from "./models/events";
-import { HousePoints } from "./models/house";
+﻿import { InMemoryRepository } from "./repositories/in-memory.repository";
+import { Spell } from "./models/spell";
 
-const sort: SpellCastEvent = {
-  type: "spell-cast",
-  wizardId: 1,
-  spell: "Expelliarmus",
-  power: 50,
-};
+const sorts = new InMemoryRepository<Spell>();
 
-const points: NonSpellEvent = {
-  type: "points-awarded",
-  house: "Gryffindor",
-  points: 10,
-  reason: "Bonne réponse en cours de potions",
-};
+const lumos = sorts.add({ name: "Lumos", incantation: "Lumos !", power: 10 });
+const stupefix = sorts.add({ name: "Stupefix", incantation: "Stupefix !", power: 60 });
 
-const coupe: HousePoints = {
-  Gryffindor: 120,
-  Slytherin: 110,
-  Ravenclaw: 95,
-  Hufflepuff: 100,
-};
-
-console.log("Sort lancé :", sort);
-console.log("Autre événement :", points);
-console.log("Coupe des Quatre Maisons :", coupe);
+console.log("Lumos a reçu l'id :", lumos.id);
+console.log("Stupefix a reçu l'id :", stupefix.id);
+console.log("Tous les sorts :", sorts.findAll());
+console.log("Sort n°2 :", sorts.findById(2));
+console.log("Sorts de puissance 10 :", sorts.findBy("power", 10));
+console.log("Suppression de Lumos :", sorts.remove(1));
+console.log("Après suppression :", sorts.findAll());
