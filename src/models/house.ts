@@ -9,3 +9,8 @@ export const HOUSES = ["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"] as 
  * Résultat : "Gryffindor" | "Slytherin" | "Ravenclaw" | "Hufflepuff"
  */
 export type House = (typeof HOUSES)[number];
+
+
+
+/** Record : un nombre de points pour chacune des 4 maisons. */
+export type HousePoints = Record<House, number>;
