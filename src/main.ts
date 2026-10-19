@@ -1,5 +1,16 @@
-﻿import { HOUSES, House } from "./models/house";
+﻿import { NewWizard, WizardPreview, WizardUpdate } from "./models/wizard";
 
-const maMaison: House = "Gryffindor";
-console.log("Maisons de Poudlard :", HOUSES);
-console.log("Ma maison :", maMaison);
+const harry: NewWizard = {
+  name: "Harry Potter",
+  house: "Gryffindor",
+  year: 1,
+  wand: "Houx, plume de phénix",
+};
+
+const apercu: WizardPreview = { name: "Hermione Granger", house: "Gryffindor" };
+
+const changement: WizardUpdate = { year: 2 };
+
+console.log("Nouveau sorcier :", harry);
+console.log("Aperçu :", apercu);
+console.log("Mise à jour :", changement);
