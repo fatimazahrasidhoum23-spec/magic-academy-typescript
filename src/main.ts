@@ -1,27 +1,30 @@
-﻿import {
-  SpellCalculatorService,
-  DamageArgs,
-  DamageResult,
-} from "./services/spell-calculator.service";
+﻿import { isHouse } from "./guards/is-house";
+import { isWizard } from "./guards/is-wizard";
 
-console.log("=== Exercice 5 ===");
+console.log("=== Exercice 6 : isHouse ===");
+console.log('"Gryffindor" :', isHouse("Gryffindor"));  // true
+console.log('"Hufflepuff" :', isHouse("Hufflepuff"));  // true
+console.log('"Durmstrang" :', isHouse("Durmstrang"));  // false
+console.log('"gryffindor" :', isHouse("gryffindor"));  // false (minuscule)
+console.log("42 :", isHouse(42));                       // false
 
-const calculateurHarry = new SpellCalculatorService();
-const calculateurDraco = new SpellCalculatorService();
+console.log("\n=== Exercice 6 : isWizard ===");
 
-console.log("\n-- Calculateur de Harry --");
-console.log("Résultat :", calculateurHarry.calculateDamage(50, 3)); // calcul
-console.log("Résultat :", calculateurHarry.calculateDamage(50, 3)); // cache ⚡
-console.log("Résultat :", calculateurHarry.calculateDamage(80, 5)); // calcul (nouveaux args)
-console.log("Résultat :", calculateurHarry.calculateDamage(50, 3)); // cache ⚡
+// Données "venues de l'extérieur" : TypeScript ne connaît pas leur type
+const donnees: unknown[] = [
+  { id: 1, name: "Luna Lovegood", house: "Ravenclaw", year: 4, wand: "Peut-être sorbier" },
+  { id: 2, name: "Viktor Krum", house: "Durmstrang", year: 7, wand: "Charme, ventricule de dragon" },
+  { id: 3, name: "Neville Londubat", house: "Gryffindor", wand: "Cerisier" },
+  { id: 4, name: "Cedric Diggory", house: "Hufflepuff", year: 9, wand: "Frêne" },
+  null,
+  "Je suis un sorcier, promis",
+];
 
-console.log("\n-- Calculateur de Draco (cache séparé) --");
-console.log("Résultat :", calculateurDraco.calculateDamage(50, 3)); // calcul (autre instance)
-
-console.log("\nCalculs réels Harry :", calculateurHarry.getComputationCount()); // 2
-console.log("Calculs réels Draco :", calculateurDraco.getComputationCount()); // 1
-
-// Parameters et ReturnType
-const args: DamageArgs = [100, 7];
-const resultat: DamageResult = calculateurHarry.calculateDamage(...args);
-console.log("\nAvec Parameters et ReturnType :", resultat);
+for (const donnee of donnees) {
+  if (isWizard(donnee)) {
+    // Ici, TypeScript SAIT que donnee est un Wizard : l'autocomplétion marche
+    console.log(`✅ ${donnee.name} (${donnee.house}, année ${donnee.year})`);
+  } else {
+    console.log("❌ Refusé :", JSON.stringify(donnee));
+  }
+}
