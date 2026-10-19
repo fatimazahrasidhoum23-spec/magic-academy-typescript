@@ -1,16 +1,15 @@
-﻿import { NewWizard, WizardPreview, WizardUpdate } from "./models/wizard";
+﻿import { NewSpell } from "./models/spell";
 
-const harry: NewWizard = {
-  name: "Harry Potter",
-  house: "Gryffindor",
-  year: 1,
-  wand: "Houx, plume de phénix",
+const lumos: NewSpell = {
+  name: "Lumos",
+  incantation: "Lumos !",
+  power: 10,
 };
 
-const apercu: WizardPreview = { name: "Hermione Granger", house: "Gryffindor" };
+const expelliarmus: NewSpell = {
+  name: "Expelliarmus",
+  incantation: "Expelliarmus !",
+  power: 50,
+};
 
-const changement: WizardUpdate = { year: 2 };
-
-console.log("Nouveau sorcier :", harry);
-console.log("Aperçu :", apercu);
-console.log("Mise à jour :", changement);
+console.log("Sorts :", lumos, expelliarmus);
